@@ -1,0 +1,40 @@
+SUNSEEK GROUND STATION - QUIET PREPARE 1.0
+
+This is a new standalone Windows desktop app, not a patched copy of the original MUT application. Original files are unchanged.
+
+START HERE
+1. Extract the whole ZIP. Keep the executable and its _internal directory together.
+2. Upload the included firmware/ PlatformIO project to the ESP32 once. It is v3.0-QP2. Check TEAM_NAME and your sensor calibration first.
+3. Close/disconnect the previous ground station so only this app uses the Bluetooth connection.
+4. Open SunSeekGroundStation/SunSeekGroundStation.exe. No Python installation is needed.
+5. Scan Bluetooth, choose your SUNSEEK device, and Connect.
+6. Choose MAG (absolute compass heading) or SUN (calibrated light angle), set target, gains, tolerance and hold time. Start with a small angle change.
+7. When both the body and wheel are stationary, check the stationary box and click PREPARE. Wait for READY.
+8. Click RUN to start the mission. STOP cancels the mission and sets the motor command to zero. It does not instantly stop body rotation.
+
+PREPARE / RUN GUARANTEE
+The app first sends the read-only QP_STATUS query. It refuses setup commands unless QP2 is detected and the firmware reports MANUAL + STOPPED with no active mission. PREPARE then configures the target/profile and marks the mission READY; it never sends RW, RW_BIAS, RW_CMD, MISSION_START or ADCS_MODE,AUTO. RUN sends MISSION_START. Pending setup is cancelled when STOP is pressed.
+
+QP2 FIRMWARE
+Based on the previously supplied v3.0 Quiet Prepare project. Adds QP_STATUS capability/state query. STOP/RW_STOP now abort active missions so the mission loop cannot re-enable AUTO. PREPARE still does not apply bias. RUN/AUTO retains the existing v3.0 momentum spin-up and control behaviour. The previous custom BRAKE_PULSE and ADCS_LIMIT are not present. This app does not fix tuning, gyro bias, LDR calibration, motor thresholds, or magnetic interference.
+
+FEATURES
+- Native Windows Bluetooth LE connection using the SunSeek UART service.
+- Separate PREPARE / RUN / STOP and explicit acknowledgements/timeouts.
+- MAG/SUN target, REACTION/MOMENTUM, PD tuning and all five momentum-profile settings.
+- Live heading, light angle, error, gyro rate, estimated angle, motor PWM and body-rate plot.
+- Save/load JSON settings; CSV telemetry plus timestamped TX/RX log export.
+- Elapsed run time and first settling estimate (error inside tolerance and body rate below 2 deg/s continuously for the hold interval, with fresh valid telemetry).
+- Camera CAPTURE command only. Photo viewing/downloading and the original application's competition scoring interfaces are not implemented.
+
+LIMITATIONS
+No hardware Bluetooth connection or physical movement was tested here. Radio loss does not prove the body stopped, and firmware control may continue. Closing this app normally requires Stop and Disconnect; forced process closure cannot stop the spacecraft. Motor power is not rotation speed. Default momentum values are placeholders; explicitly confirm tested rig values before momentum preparation. Client-side settling time uses receipt timestamps and is not an official competition measurement. The firmware's mission hold criterion is independent and uses angle only. Raw logs are the best evidence for analysis.
+
+VALIDATION
+10 automated tests cover prepare/run sequencing, blocking older firmware, stop cancellation, invalid profile inputs, acknowledgements and BLE framing. Source GUI tested offscreen and inspected. Complete QP2 firmware compiled to an object; full PlatformIO linking and upload remain unverified.
+
+SOURCE / REBUILD
+Source is included in source/. Requirements are pinned in requirements.txt. Build the Windows app with PyInstaller from a Windows Python environment. The source app.py --smoke-test path renders sample telemetry without connecting to hardware.
+
+Final packaged Windows executable passed an offscreen launch/render/exit test without PYTHONPATH. Packaging excludes a conflicting third-party ICU copy and uses Windows ICU. Windows 11 launch tested. Live Bluetooth/spacecraft operation was not tested.
+RUN leaves AUTO active until STOP; a settling measurement does not automatically stop the spacecraft or capture an image.

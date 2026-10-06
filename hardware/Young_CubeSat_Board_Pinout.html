@@ -1,0 +1,398 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Young CubeSat Board Pinout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: schematic-sheet reference — title block, full-width schematic, then pin map and detail circuits on a 2-col grid */
+:root{
+  --paper:#eef1f3; --panel:#f8fafb; --ink:#1b2833; --muted:#5a6b78;
+  --wire:#2c4a63; --rule:#c9d3da; --copper:#b0602a; --warn:#a8740a; --warn-bg:#f6ecd4; --ok:#2f7a55;
+  --display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#11181e; --panel:#172129; --ink:#dbe4ea; --muted:#90a2b0;
+  --wire:#93b3cb; --rule:#2a3843; --copper:#e2894c; --warn:#e2b54e; --warn-bg:#2d2615; --ok:#62c08f; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --paper:#11181e; --panel:#172129; --ink:#dbe4ea; --muted:#90a2b0;
+  --wire:#93b3cb; --rule:#2a3843; --copper:#e2894c; --warn:#e2b54e; --warn-bg:#2d2615; --ok:#62c08f; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 56px;display:flex;flex-direction:column;gap:36px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(30px,5vw,44px);font-weight:700;letter-spacing:.01em}
+h2{font-size:24px;font-weight:600;display:flex;align-items:baseline;gap:10px}
+h2 .ref{font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:400;letter-spacing:.04em}
+h3{font-size:18px;font-weight:600}
+p{margin:0;max-width:68ch}
+code,.mono{font-family:var(--mono);font-size:.88em}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--copper)}
+
+/* title block */
+.title{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end;border-bottom:2px solid var(--wire);padding-bottom:18px}
+.title .lead{color:var(--muted);margin-top:8px}
+.tblock{display:grid;grid-template-columns:auto auto;border:1px solid var(--wire);font-family:var(--mono);font-size:12px}
+.tblock div{padding:5px 10px;border-bottom:1px solid var(--rule)}
+.tblock div:nth-child(odd){color:var(--muted);border-right:1px solid var(--rule)}
+.tblock div:nth-last-child(-n+2){border-bottom:0}
+@media (max-width:760px){.title{grid-template-columns:1fr}}
+
+section{display:flex;flex-direction:column;gap:14px}
+.sheet{background:var(--panel);border:1px solid var(--rule);border-radius:4px;overflow-x:auto}
+.sheet svg{display:block;min-width:980px;width:100%;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{display:inline-block;width:28px;height:0;border-top:2px solid var(--wire)}
+.legend i.d{border-top-style:dashed}
+.legend i.p{border-color:var(--copper)}
+.legend i.w{border-color:var(--warn);border-top-width:6px;border-radius:2px}
+
+/* svg styling via tokens */
+.w{stroke:var(--wire);stroke-width:1.6;fill:none}
+.pw{stroke:var(--copper);stroke-width:2.2;fill:none}
+.box{fill:var(--paper);stroke:var(--wire);stroke-width:1.6}
+.box.inf{stroke-dasharray:6 4}
+.mod{fill:var(--panel);stroke:var(--wire);stroke-width:2.2}
+.part{fill:var(--panel);stroke:var(--wire);stroke-width:1.6}
+.dot{fill:var(--wire)}
+.t{fill:var(--ink);font-family:var(--body);font-size:12.5px}
+.tb{fill:var(--ink);font-family:var(--display);font-size:15px;font-weight:600}
+.n{fill:var(--wire);font-family:var(--mono);font-size:11.5px}
+.s{fill:var(--muted);font-family:var(--mono);font-size:10.5px}
+.p{fill:var(--copper);font-family:var(--mono);font-size:11.5px;font-weight:500}
+.wn{fill:var(--warn);font-family:var(--mono);font-size:11.5px;font-weight:500}
+.big{fill:var(--rule);font-family:var(--display);font-size:40px;font-weight:700}
+.gnd{color:var(--wire)}
+.hl{fill:var(--warn-bg);stroke:var(--warn);stroke-width:1.2}
+.pin{fill:var(--paper);stroke:var(--wire);stroke-width:1.4}
+.pin.wp{stroke:var(--warn)}
+
+/* pin table */
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:4px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--paper)}
+tbody tr:last-child td{border-bottom:0}
+td.g{font-family:var(--mono);font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.c{font-family:var(--mono);font-size:12.5px;color:var(--wire);white-space:nowrap}
+tr.grp td{background:var(--paper);font-family:var(--display);font-weight:600;font-size:15px;color:var(--copper);padding-block:6px}
+.chip{display:inline-block;font-family:var(--mono);font-size:11px;padding:1px 7px;border-radius:3px;border:1px solid var(--rule);color:var(--muted);white-space:nowrap}
+.chip.warn{border-color:var(--warn);color:var(--warn);background:var(--warn-bg)}
+.chip.ok{border-color:var(--ok);color:var(--ok)}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card pre{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.45;color:var(--wire);background:var(--paper);border:1px solid var(--rule);border-radius:3px;padding:10px 12px;overflow-x:auto}
+.card ul,.card ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.mini{border-collapse:collapse;width:100%;font-size:13.5px;min-width:0}
+.mini td,.mini th{padding:5px 8px;border-bottom:1px solid var(--rule)}
+.mini th{background:none}
+.mini td.num{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.swatch{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:1px solid var(--rule)}
+
+.cav{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.cav div{border-left:4px solid var(--warn);background:var(--panel);padding:12px 14px;border-radius:0 4px 4px 0;display:flex;flex-direction:column;gap:4px;min-width:0}
+.cav b{font-family:var(--display);font-size:16px;font-weight:600}
+.cav p{font-size:14px;color:var(--muted)}
+.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:14px}
+</style>
+
+<div class="wrap">
+
+<header class="title">
+  <div>
+    <div class="eyebrow">Young CubeSat competition · electrical reference</div>
+    <h1>Young CubeSat Board Pinout</h1>
+    <p class="lead">ESP32-S3 flight board with two LDR sun sensors, a 28BYJ-48 stepper on a ULN2003, an SSD1306 OLED and 18650 battery power. Pin names match <code>include/board_pins.h</code> in the PlatformIO quick start.</p>
+  </div>
+  <div class="tblock">
+    <div>MCU</div><div>ESP32-S3-WROOM-1</div>
+    <div>Program</div><div>CP210x · UART0 · 921600</div>
+    <div>Monitor</div><div>115200 8N1</div>
+    <div>Logic</div><div>3.3 V</div>
+    <div>Motor rail</div><div>5 V boost</div>
+    <div>Rev</div><div>A · 2026-10-05</div>
+  </div>
+</header>
+
+<section>
+  <h2>Block schematic <span class="ref">SHEET 1/1</span></h2>
+  <div class="legend">
+    <span><i></i>signal, confirmed by organisers</span>
+    <span><i class="d"></i>part inferred from the board photo, verify</span>
+    <span><i class="p"></i>power</span>
+    <span><i class="w"></i>caveat</span>
+  </div>
+  <div class="sheet">
+<svg viewBox="0 0 1120 700" role="img" aria-label="Block schematic of the Young CubeSat ESP32-S3 board">
+  <defs>
+    <symbol id="g" viewBox="-10 0 20 12" width="20" height="12" overflow="visible">
+      <path d="M-9 1H9M-5.5 5H5.5M-2 9H2" stroke="currentColor" stroke-width="1.6" fill="none"/>
+    </symbol>
+  </defs>
+
+  <!-- ===== POWER BAND ===== -->
+  <rect class="box" x="20" y="30" width="100" height="56" rx="3"/>
+  <text class="tb" x="30" y="52">J1 USB-C</text><text class="s" x="30" y="72">VBUS 5 V + data</text>
+  <path class="pw" d="M120 58H160"/>
+  <rect class="box inf" x="160" y="30" width="120" height="56" rx="3"/>
+  <text class="tb" x="170" y="52">U1 charger</text><text class="s" x="170" y="72">TP4056-class</text>
+  <path class="pw" d="M280 58H320"/><text class="p" x="284" y="50">BAT</text>
+  <rect class="box" x="320" y="30" width="110" height="56" rx="3"/>
+  <text class="tb" x="330" y="52">BT1 18650</text><text class="s" x="330" y="72">3.0 – 4.2 V</text>
+  <path class="pw" d="M430 58H470"/>
+  <rect class="box" x="470" y="38" width="60" height="40" rx="3"/>
+  <text class="tb" x="480" y="63">SW1</text>
+  <path class="pw" d="M530 58H570"/>
+  <rect class="box inf" x="570" y="30" width="120" height="56" rx="3"/>
+  <text class="tb" x="580" y="52">U4 boost</text><text class="s" x="580" y="72">VBAT → 5 V</text>
+  <path class="pw" d="M690 58H760M725 58V96"/><circle class="dot" cx="725" cy="58" r="3.2" style="fill:var(--copper)"/>
+  <text class="p" x="725" y="110" text-anchor="middle">+5V_MOT</text>
+  <rect class="box inf" x="760" y="30" width="110" height="56" rx="3"/>
+  <text class="tb" x="770" y="52">U2 LDO</text><text class="s" x="770" y="72">5 V → 3.3 V</text>
+  <path class="pw" d="M870 58H925"/><text class="p" x="932" y="62">+3V3  (ESP32, OLED, LDRs)</text>
+
+  <!-- USB data to CP210x -->
+  <path class="w" d="M70 86V520H130"/><text class="n" x="62" y="300" transform="rotate(-90 62 300)">USB D+ / D−</text>
+
+  <!-- ===== MODULE U3 ===== -->
+  <rect class="mod" x="430" y="150" width="260" height="430" rx="6"/>
+  <text class="tb" x="560" y="176" text-anchor="middle">U3 · ESP32-S3-WROOM-1</text>
+  <text class="big" x="560" y="275" text-anchor="middle">ESP32-S3</text>
+  <path class="pw" d="M470 150V130"/><text class="p" x="470" y="124" text-anchor="middle">+3V3</text>
+  <path class="w" d="M650 150V136"/><text class="s" x="650" y="130" text-anchor="middle">GND</text>
+
+  <!-- left pins -->
+  <path class="w" d="M400 200H430M400 330H430M370 420H430M370 450H430M300 510H430M300 540H430"/>
+  <text class="n" x="440" y="204">IO17</text><text class="wn" x="478" y="204">LDR_L · ADC2_CH6</text>
+  <text class="n" x="440" y="334">IO16</text><text class="wn" x="478" y="334">LDR_R · ADC2_CH5</text>
+  <text class="n" x="440" y="424">IO4</text><text class="s" x="472" y="424">RSV_A · ADC1_CH3</text>
+  <text class="n" x="440" y="454">IO5</text><text class="s" x="472" y="454">RSV_B · ADC1_CH4</text>
+  <text class="n" x="440" y="514">IO43</text><text class="s" x="478" y="514">TXD0</text>
+  <text class="n" x="440" y="544">IO44</text><text class="s" x="478" y="544">RXD0</text>
+
+  <!-- right pins -->
+  <path class="w" d="M690 190H800M690 220H800M690 300H800M690 330H800M690 360H800M690 390H800"/>
+  <text class="n" x="680" y="194" text-anchor="end">IO8</text><text class="s" x="645" y="194" text-anchor="end">SDA</text>
+  <text class="n" x="680" y="224" text-anchor="end">IO9</text><text class="s" x="645" y="224" text-anchor="end">SCL</text>
+  <text class="n" x="680" y="304" text-anchor="end">IO15</text><text class="s" x="645" y="304" text-anchor="end">IN1</text>
+  <text class="n" x="680" y="334" text-anchor="end">IO6</text><text class="s" x="645" y="334" text-anchor="end">IN2</text>
+  <text class="n" x="680" y="364" text-anchor="end">IO7</text><text class="s" x="645" y="364" text-anchor="end">IN3</text>
+  <text class="n" x="680" y="394" text-anchor="end">IO18</text><text class="s" x="645" y="394" text-anchor="end">IN4</text>
+
+  <!-- bottom pins → J3 free header -->
+  <path class="w" d="M462 580V612M490 580V612M518 580V612M546 580V612M574 580V612M602 580V612M630 580V612M658 580V612"/>
+  <text class="wn" x="462" y="570" text-anchor="middle">46</text>
+  <text class="n" x="490" y="570" text-anchor="middle">38</text>
+  <text class="n" x="518" y="570" text-anchor="middle">39</text>
+  <text class="n" x="546" y="570" text-anchor="middle">40</text>
+  <text class="n" x="574" y="570" text-anchor="middle">41</text>
+  <text class="n" x="602" y="570" text-anchor="middle">42</text>
+  <text class="n" x="630" y="570" text-anchor="middle">2</text>
+  <text class="n" x="658" y="570" text-anchor="middle">1</text>
+  <rect class="box" x="446" y="612" width="228" height="34" rx="3"/>
+  <circle class="pin wp" cx="462" cy="629" r="6"/>
+  <circle class="pin" cx="490" cy="629" r="6"/><circle class="pin" cx="518" cy="629" r="6"/>
+  <circle class="pin" cx="546" cy="629" r="6"/><circle class="pin" cx="574" cy="629" r="6"/>
+  <circle class="pin" cx="602" cy="629" r="6"/><circle class="pin" cx="630" cy="629" r="6"/>
+  <circle class="pin" cx="658" cy="629" r="6"/>
+  <text class="tb" x="560" y="668" text-anchor="middle">J3 free I/O header</text>
+  <text class="s" x="560" y="686" text-anchor="middle">order as supplied, check silkscreen · 2 &amp; 1 = ADC1</text>
+
+  <!-- ===== LDR LEFT (x=300) ===== -->
+  <text class="p" x="300" y="112" text-anchor="middle">+3V3</text>
+  <path class="w" d="M300 118V135M300 180V215M300 255V275M300 200H400M300 200H250V228M250 236V275"/>
+  <circle class="dot" cx="300" cy="200" r="3.2"/>
+  <rect class="part" x="290" y="135" width="20" height="45" rx="2"/>
+  <path class="w" d="M262 132l18 12M258 146l18 12"/><path class="w" d="M276 140l4 4-5 1M272 154l4 4-5 1"/>
+  <text class="t" x="318" y="155">LDR_L</text><text class="s" x="318" y="170">left cell</text>
+  <rect class="part" x="292" y="215" width="16" height="40" rx="2"/>
+  <text class="t" x="316" y="232">R_F</text><text class="s" x="316" y="247">3.3 kΩ*</text>
+  <path class="w" d="M238 228H262M238 236H262"/><text class="s" x="232" y="236" text-anchor="end">100n*</text>
+  <use href="#g" class="gnd" x="290" y="275" width="20" height="12"/>
+  <use href="#g" class="gnd" x="240" y="275" width="20" height="12"/>
+
+  <!-- ===== LDR RIGHT (x=180) ===== -->
+  <text class="p" x="180" y="242" text-anchor="middle">+3V3</text>
+  <path class="w" d="M180 248V265M180 310V345M180 385V405M180 330H400M180 330H130V358M130 366V405"/>
+  <circle class="dot" cx="180" cy="330" r="3.2"/>
+  <rect class="part" x="170" y="265" width="20" height="45" rx="2"/>
+  <path class="w" d="M142 262l18 12M138 276l18 12"/><path class="w" d="M156 270l4 4-5 1M152 284l4 4-5 1"/>
+  <text class="t" x="198" y="285">LDR_R</text><text class="s" x="198" y="300">right cell</text>
+  <rect class="part" x="172" y="345" width="16" height="40" rx="2"/>
+  <text class="t" x="196" y="362">R_F</text><text class="s" x="196" y="377">3.3 kΩ*</text>
+  <path class="w" d="M118 358H142M118 366H142"/><text class="s" x="112" y="366" text-anchor="end">100n*</text>
+  <use href="#g" class="gnd" x="170" y="405" width="20" height="12"/>
+  <use href="#g" class="gnd" x="120" y="405" width="20" height="12"/>
+
+  <!-- ===== J2 reserve ===== -->
+  <rect class="box" x="300" y="402" width="70" height="66" rx="3"/>
+  <circle class="pin" cx="356" cy="420" r="5"/><circle class="pin" cx="356" cy="450" r="5"/>
+  <text class="n" x="310" y="424">IO4</text><text class="n" x="310" y="454">IO5</text>
+  <text class="tb" x="335" y="488" text-anchor="middle">J2 reserve</text>
+
+  <!-- ===== CP210x ===== -->
+  <rect class="box" x="130" y="494" width="170" height="70" rx="3"/>
+  <text class="tb" x="140" y="514">U6 CP210x</text>
+  <text class="s" x="292" y="514" text-anchor="end">RXD</text>
+  <text class="s" x="292" y="544" text-anchor="end">TXD</text>
+  <text class="s" x="140" y="534">USB ↔ UART</text>
+  <text class="s" x="140" y="555">DTR/RTS → EN, IO0</text>
+
+  <!-- ===== OLED ===== -->
+  <path class="pw" d="M900 160V140"/><text class="p" x="900" y="134" text-anchor="middle">+3V3</text>
+  <rect class="box" x="800" y="160" width="170" height="86" rx="3"/>
+  <text class="n" x="810" y="194">SDA</text><text class="n" x="810" y="224">SCL</text>
+  <text class="tb" x="852" y="186">U5 OLED</text>
+  <text class="s" x="852" y="204">SSD1306 128×64</text>
+  <text class="s" x="852" y="220">I²C 0x3C · 400 kHz</text>
+  <text class="s" x="852" y="236">pull-ups on module</text>
+
+  <!-- ===== ULN2003 ===== -->
+  <text class="tb" x="800" y="272">U7 ULN2003</text>
+  <rect class="box" x="800" y="280" width="120" height="132" rx="3"/>
+  <text class="n" x="808" y="304">IN1</text><text class="n" x="808" y="334">IN2</text>
+  <text class="n" x="808" y="364">IN3</text><text class="n" x="808" y="394">IN4</text>
+  <text class="n" x="912" y="304" text-anchor="end">OUT1</text><text class="n" x="912" y="334" text-anchor="end">OUT2</text>
+  <text class="n" x="912" y="364" text-anchor="end">OUT3</text><text class="n" x="912" y="394" text-anchor="end">OUT4</text>
+  <path class="pw" d="M860 412V432"/><text class="p" x="860" y="446" text-anchor="middle">COM → +5V_MOT</text>
+
+  <!-- ===== MOTOR ===== -->
+  <path class="w" d="M920 300H1000M920 330H1000M920 360H1000M920 390H1000"/>
+  <text class="s" x="960" y="296" text-anchor="middle">blue</text>
+  <text class="s" x="960" y="326" text-anchor="middle">pink</text>
+  <text class="s" x="960" y="356" text-anchor="middle">yellow</text>
+  <text class="s" x="960" y="386" text-anchor="middle">orange</text>
+  <rect class="box" x="1000" y="282" width="104" height="126" rx="3"/>
+  <circle class="part" cx="1052" cy="342" r="30"/>
+  <text class="tb" x="1052" y="348" text-anchor="middle">M1</text>
+  <text class="s" x="1052" y="398" text-anchor="middle">28BYJ-48 5 V</text>
+  <path class="pw" d="M1052 282V262"/><text class="p" x="1052" y="256" text-anchor="middle">red → +5V_MOT</text>
+
+  <!-- ===== NOTES ===== -->
+  <text class="t" x="740" y="500">Notes</text>
+  <text class="s" x="740" y="522">• All GND common; logic is 3.3 V.</text>
+  <text class="s" x="740" y="540">• IO16/IO17 are ADC2: unusable while Wi-Fi is on.</text>
+  <text class="s" x="740" y="558">• IO46 is a strapping pin: never pull it high at reset.</text>
+  <text class="s" x="740" y="576">• IO43/IO44 are owned by the CP210x (Serial).</text>
+  <text class="s" x="740" y="594">• * divider values from the team build spec, not the board.</text>
+  <text class="s" x="740" y="612">• Dashed parts inferred from the board photo.</text>
+</svg>
+  </div>
+</section>
+
+<section>
+  <h2>Pin map <span class="ref">GPIO → NET → CODE</span></h2>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>GPIO</th><th>Net</th><th>Goes to</th><th>Capability</th><th>Code constant</th><th>Watch out</th></tr></thead>
+    <tbody>
+      <tr class="grp"><td colspan="6">Sensors</td></tr>
+      <tr><td class="g">IO17</td><td>LDR_L</td><td>Left LDR divider node</td><td>ADC2_CH6</td><td class="c">PIN_LDR_LEFT</td><td><span class="chip warn">ADC2 · Wi-Fi off</span></td></tr>
+      <tr><td class="g">IO16</td><td>LDR_R</td><td>Right LDR divider node</td><td>ADC2_CH5</td><td class="c">PIN_LDR_RIGHT</td><td><span class="chip warn">ADC2 · Wi-Fi off</span></td></tr>
+      <tr class="grp"><td colspan="6">Stepper (ULN2003 → 28BYJ-48)</td></tr>
+      <tr><td class="g">IO15</td><td>STEP_IN1</td><td>ULN2003 IN1 → OUT1 (blue)</td><td>output</td><td class="c">PIN_STEP_IN1</td><td><span class="chip">LOW at boot</span></td></tr>
+      <tr><td class="g">IO6</td><td>STEP_IN2</td><td>ULN2003 IN2 → OUT2 (pink)</td><td>output</td><td class="c">PIN_STEP_IN2</td><td></td></tr>
+      <tr><td class="g">IO7</td><td>STEP_IN3</td><td>ULN2003 IN3 → OUT3 (yellow)</td><td>output</td><td class="c">PIN_STEP_IN3</td><td></td></tr>
+      <tr><td class="g">IO18</td><td>STEP_IN4</td><td>ULN2003 IN4 → OUT4 (orange)</td><td>output</td><td class="c">PIN_STEP_IN4</td><td></td></tr>
+      <tr class="grp"><td colspan="6">I²C bus</td></tr>
+      <tr><td class="g">IO8</td><td>SDA</td><td>OLED SSD1306 + any I²C add-on</td><td>I²C0 SDA</td><td class="c">PIN_I2C_SDA</td><td><span class="chip">shared bus</span></td></tr>
+      <tr><td class="g">IO9</td><td>SCL</td><td>OLED SSD1306 + any I²C add-on</td><td>I²C0 SCL</td><td class="c">PIN_I2C_SCL</td><td><span class="chip">shared bus</span></td></tr>
+      <tr class="grp"><td colspan="6">Reserve connector J2</td></tr>
+      <tr><td class="g">IO4</td><td>RSV_A</td><td>J2</td><td>ADC1_CH3 · touch · PWM</td><td class="c">PIN_RSV_A</td><td><span class="chip ok">best analog spare</span></td></tr>
+      <tr><td class="g">IO5</td><td>RSV_B</td><td>J2</td><td>ADC1_CH4 · touch · PWM</td><td class="c">PIN_RSV_B</td><td><span class="chip ok">best analog spare</span></td></tr>
+      <tr class="grp"><td colspan="6">Free header J3</td></tr>
+      <tr><td class="g">IO46</td><td>IO46</td><td>J3</td><td>GPIO · PWM</td><td class="c">PIN_IO46</td><td><span class="chip warn">strapping · no pull-up</span></td></tr>
+      <tr><td class="g">IO38</td><td>IO38</td><td>J3</td><td>GPIO · PWM · UART/SPI via matrix</td><td class="c">PIN_IO38</td><td></td></tr>
+      <tr><td class="g">IO39</td><td>IO39</td><td>J3</td><td>GPIO · PWM</td><td class="c">PIN_IO39</td><td><span class="chip">JTAG MTCK</span></td></tr>
+      <tr><td class="g">IO40</td><td>IO40</td><td>J3</td><td>GPIO · PWM</td><td class="c">PIN_IO40</td><td><span class="chip">JTAG MTDO</span></td></tr>
+      <tr><td class="g">IO41</td><td>IO41</td><td>J3</td><td>GPIO · PWM</td><td class="c">PIN_IO41</td><td><span class="chip">JTAG MTDI</span></td></tr>
+      <tr><td class="g">IO42</td><td>IO42</td><td>J3</td><td>GPIO · PWM</td><td class="c">PIN_IO42</td><td><span class="chip">JTAG MTMS</span></td></tr>
+      <tr><td class="g">IO2</td><td>IO2</td><td>J3</td><td>ADC1_CH1 · touch · PWM</td><td class="c">PIN_IO2</td><td><span class="chip ok">analog OK with Wi-Fi</span></td></tr>
+      <tr><td class="g">IO1</td><td>IO1</td><td>J3</td><td>ADC1_CH0 · touch · PWM</td><td class="c">PIN_IO1</td><td><span class="chip ok">analog OK with Wi-Fi</span></td></tr>
+      <tr class="grp"><td colspan="6">Taken by the board or the chip — do not reuse</td></tr>
+      <tr><td class="g">IO43 / IO44</td><td>TXD0 / RXD0</td><td>CP210x RXD / TXD</td><td>UART0 = <code>Serial</code></td><td class="c">—</td><td><span class="chip warn">upload &amp; monitor</span></td></tr>
+      <tr><td class="g">IO0</td><td>BOOT</td><td>BOOT button, CP210x auto-reset</td><td>strapping</td><td class="c">—</td><td><span class="chip warn">low = download mode</span></td></tr>
+      <tr><td class="g">EN</td><td>RESET</td><td>Reset button, CP210x auto-reset</td><td>chip enable</td><td class="c">—</td><td></td></tr>
+      <tr><td class="g">IO3, IO45</td><td>—</td><td>not exposed</td><td>strapping</td><td class="c">—</td><td></td></tr>
+      <tr><td class="g">IO26–32</td><td>—</td><td>module flash</td><td>SPI flash</td><td class="c">—</td><td><span class="chip">never touch</span></td></tr>
+      <tr><td class="g">IO35–37</td><td>—</td><td>octal PSRAM on R8 modules</td><td>—</td><td class="c">—</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>Detail circuits <span class="ref">WHAT THE CODE ASSUMES</span></h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>LDR divider</h3>
+<pre>+3V3 ── LDR ──┬──► IO17 / IO16 (ADC)
+              │
+         R_F ═╪═ 100 nF
+              │
+             GND</pre>
+      <p>Node voltage rises with light: <code>V = 3.3 · R_F / (R_F + R_LDR)</code>, so <code>R_LDR = R_F · (3300 / V_mV − 1)</code>. If your board has the LDR on the GND side instead, set <code>LDR_HIGH_SIDE = false</code> in <code>app_config.h</code>.</p>
+      <p>Balance used by the demo: <code>D = (L − R) / (L + R)</code>. D &gt; 0 means the light is on the left.</p>
+    </div>
+
+    <div class="card">
+      <h3>Stepper drive</h3>
+      <table class="mini">
+        <thead><tr><th>Pin</th><th>ULN out</th><th>Wire</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">IO15</td><td>OUT1</td><td><span class="swatch" style="background:#3a6fd8"></span>blue</td></tr>
+          <tr><td class="mono">IO6</td><td>OUT2</td><td><span class="swatch" style="background:#e58bb4"></span>pink</td></tr>
+          <tr><td class="mono">IO7</td><td>OUT3</td><td><span class="swatch" style="background:#e3c72e"></span>yellow</td></tr>
+          <tr><td class="mono">IO18</td><td>OUT4</td><td><span class="swatch" style="background:#e8862b"></span>orange</td></tr>
+          <tr><td class="mono">—</td><td>COM</td><td><span class="swatch" style="background:#d23b2f"></span>red, +5 V</td></tr>
+        </tbody>
+      </table>
+      <p>Half-step, 8 phases: <code>1000 1100 0100 0110 0010 0011 0001 1001</code>. 4096 half-steps per output turn nominal (4075.8 on 63.68:1 gearboxes). Keep each half-step ≥ 1 ms or it stalls.</p>
+    </div>
+
+    <div class="card">
+      <h3>Power budget <span class="s mono" style="font-size:12px;color:var(--muted)">approximate</span></h3>
+      <table class="mini">
+        <thead><tr><th>Load</th><th style="text-align:right">Current</th></tr></thead>
+        <tbody>
+          <tr><td>ESP32-S3, radios off</td><td class="num">40–60 mA @ 3.3 V</td></tr>
+          <tr><td>OLED, typical page</td><td class="num">10–20 mA @ 3.3 V</td></tr>
+          <tr><td>28BYJ-48, coils on</td><td class="num">100–200 mA @ 5 V</td></tr>
+          <tr><td><b>Battery, coils off</b></td><td class="num">≈ 0.13 A → ~15 h</td></tr>
+          <tr><td><b>Battery, coils on</b></td><td class="num">≈ 0.45 A → ~4.5 h</td></tr>
+        </tbody>
+      </table>
+      <p>Assumes a 2500 mAh cell, about 85 % boost efficiency and the 3.3 V LDO fed from the 5 V rail. The firmware turns the coils off 300 ms after each move, which is the single biggest saving.</p>
+    </div>
+
+    <div class="card">
+      <h3>Adding the mystery peripherals</h3>
+      <ol>
+        <li>Analog sensor: <b>IO4, IO5, IO1, IO2</b> (ADC1, keeps working with Wi-Fi).</li>
+        <li>I²C sensor: same bus as the OLED (IO8/IO9). Run <code>i</code> in the console to see its address.</li>
+        <li>UART, SPI, PWM, servo, buttons: any free pin; the S3 routes these peripherals to any GPIO.</li>
+        <li>5 V devices: power from <code>+5V_MOT</code>, but level-shift or divide any 5 V signal coming back into a GPIO.</li>
+        <li>Add the pin to <code>board_pins.h</code> first, then use the constant in code.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Before you power it up <span class="ref">CAVEATS</span></h2>
+  <div class="cav">
+    <div><b>LDRs sit on ADC2</b><p>IO16 and IO17 return errors or noise once Wi-Fi starts. Keep the radio off, or jumper the LDR signals to IO1/IO2/IO4/IO5 if you need telemetry over Wi-Fi.</p></div>
+    <div><b>IO46 is a boot strap</b><p>Use it as an output or a button to GND. A pull-up or a sensor that drives it high at reset can stop the board booting or uploading.</p></div>
+    <div><b>Upload goes through the CP210x</b><p>Install the Silicon Labs VCP driver and use a data cable. If auto-reset fails, hold BOOT, tap RESET, release BOOT, upload again.</p></div>
+    <div><b>Motor noise on the sensors</b><p>Read the LDRs after the motor stops. Stepping injects noise on the 5 V and ground return, and the cells lag about 30 ms.</p></div>
+  </div>
+</section>
+
+<p class="foot">Pin assignments from the organisers' board description. Charger, boost and LDO identities and the LDR divider values are inferred from the board photo and the team's build spec. Confirm them with a multimeter before relying on them.</p>
+</div>
+
+</body></html>

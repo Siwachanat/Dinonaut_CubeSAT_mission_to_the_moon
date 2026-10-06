@@ -1,0 +1,57 @@
+[
+  {
+    "file": "MUT_Ground_Station_v1.10.zip",
+    "bytes": 48098687,
+    "sha256": "bf35689568f46e57f646bd567aefc22f0c43138d3bd4dd8d57b75a1512a4716c"
+  },
+  {
+    "file": "MUT_Ground_Station_v1.9.zip",
+    "bytes": 48091899,
+    "sha256": "89d3d8fe8adac7207884f1ca09c044e4b9de0d93bd953bcf58db826e38dde281"
+  },
+  {
+    "file": "SunSeek_Base_Station_QP2.zip",
+    "bytes": 49218919,
+    "sha256": "ef341958ff4f144ee820fa5ba63128915de7921579a8f3bec94c3b4ed20e6e8e"
+  },
+  {
+    "file": "SunSeek_Firmware_QP2.zip",
+    "bytes": 96466,
+    "sha256": "d2405be11c776074c6af5775604d51bdd75b554791d275b0b616d427b66979ce"
+  },
+  {
+    "file": "SunSeek_Ground_Station.zip",
+    "bytes": 49334701,
+    "sha256": "224e45bdb4fbce068146ead2ff564c3a3c426171399790c735453169c6fd7c4c"
+  },
+  {
+    "file": "SunSeek_Original_Arduino_v3_0.zip",
+    "bytes": 41446,
+    "sha256": "23ac51ffad5de44bf418a2428253c71b8c4f7beef1e1a220e5a39b5fd725973d"
+  },
+  {
+    "file": "SunSeek_Original_PlatformIO_v2_1.zip",
+    "bytes": 40776,
+    "sha256": "892b51712d1778dd9da83be0d53aa26e6b9454a23a69a663f2c5b8270c006eac"
+  },
+  {
+    "file": "SunSeek_PlatformIO_AutoLimit.zip",
+    "bytes": 99482,
+    "sha256": "125de9316963089d51c31236c3344e063eabd8482fd046bead974b675f7fdac9"
+  },
+  {
+    "file": "SunSeek_PlatformIO_BrakePulse.zip",
+    "bytes": 43663,
+    "sha256": "8eca247668d0c0bd333a3fee9cee90444919c09ef3755b66ce04e4ddd4eadaac"
+  },
+  {
+    "file": "SunSeek_PlatformIO_v3_0.zip",
+    "bytes": 42390,
+    "sha256": "a5d59659e82d3f6d5b3b7410efdec55a04ba7f317eb4c52440bf5e364a779b03"
+  },
+  {
+    "file": "SunSeek_PlatformIO_v3_0_QuietPrepare.zip",
+    "bytes": 97576,
+    "sha256": "5eef5c3666bc94cf5dfe6909baedeecf7b79d454cac6b073a9de9fa5a010cea5"
+  }
+]
